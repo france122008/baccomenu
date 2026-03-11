@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bacco Bar Menu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app-layout">
+        
+        <header id="main-header">
+            <div class="header-top">
+                <div class="brand-box">
+                    <h1 id="brand-name">BACCO BAR</h1>
+                    <div class="brand-subtitle">Est. 2022</div>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="custom-select" id="lang-dropdown">
+                        <button class="select-selected" id="current-lang-btn">
+                            <img src="" id="selected-flag" alt="Flag">
+                            <span id="selected-code">IT</span>
+                            <svg class="arrow-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                        </button>
+                        <div class="select-items hidden" id="lang-list"></div>
+                    </div>
+
+                    <button id="cart-trigger-btn" aria-label="Apri comanda">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        <span id="cart-count-badge" class="hidden">0</span>
+                    </button>
+                </div>
+            </div>
+            
+            <nav id="category-nav"></nav>
+        </header>
+
+        <main id="main-content">
+            <div id="product-grid">
+                </div>
+        </main>
+
+        <footer id="main-footer">
+            <div class="review-invitation">
+                <a href="https://www.tripadvisor.it/UserReviewEdit-g608937-d8552699-Bacco-Campiglia_Marittima_Province_of_Livorno_Tuscany.html" target="_blank" class="trip-btn-bacco">
+                    <svg class="trip-logo-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="currentColor" d="M448 240v32c0 26.5-21.5 48-48 48h-11.4a138 138 0 0 1-45-45 147.2 147.2 0 0 0-11.8 28.5c-30.8 12.3-64.8 12.3-95.6 0a147.2 147.2 0 0 0-11.8-28.5 137.8 137.8 0 0 1-45 45H168a147.5 147.5 0 0 1-105.4-44.8l-11.2 11.2a16 16 0 0 1-22.6-22.6l11.2-11.2A147.5 147.5 0 0 1 0 144V96h16a32 32 0 0 1 32 32 96 96 0 1 0 160 0 32 32 0 0 1 32-32h16a32 32 0 0 1 32 32 96 96 0 1 0 160 0 32 32 0 0 1 32-32h16zM160 192a64 64 0 1 1 64 64 64.07 64.07 0 0 1-64-64zm224 0a64 64 0 1 1 64 64 64.07 64.07 0 0 1-64-64z"/>
+                    </svg>
+                    <span id="review-label">Lasciaci una recensione</span>
+                </a>
+            </div>
+            
+            <div class="footer-legal">
+                <p id="footer-text"></p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="product-modal" class="modal-overlay hidden">
+        <div class="modal-content product-detail-content">
+            <button class="close-modal-btn">✕</button>
+            <img src="" id="modal-img" alt="Product">
+            <div class="modal-body">
+                <div class="modal-header-info">
+                    <h2 id="modal-title"></h2>
+                    <span id="modal-price"></span>
+                </div>
+                <p id="modal-desc"></p>
+                <div id="modal-ingredients-box">
+                    <h4 id="lbl-ingredients">Ingredienti</h4>
+                    <ul id="modal-ingredients-list"></ul>
+                </div>
+                <div id="modal-allergens-box">
+                    <h4 id="lbl-allergens">Allergeni</h4>
+                    <div id="modal-allergens-tags"></div>
+                </div>
+            </div>
+            <div class="modal-footer-action">
+                <button id="add-to-cart-btn">Aggiungi</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-modal" class="modal-overlay hidden">
+        <div class="modal-content cart-summary-content">
+            <div class="modal-header-simple">
+                <h2 id="lbl-your-order">Comanda</h2>
+                <button class="close-modal-btn">✕</button>
+            </div>
+            <div class="modal-body cart-body">
+                <ul id="cart-items-list"></ul>
+                <div id="cart-empty-msg" class="hidden"><p>...</p></div>
+            </div>
+            <div class="modal-footer-cart">
+                <div class="cart-total-row">
+                    <span id="lbl-total">Totale:</span>
+                    <span id="cart-total-price">€0.00</span>
+                </div>
+                <p class="cart-note"></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyAuSfjLNz3Eg0I_PSqbPYQW4MYkXjMzsOg",
+        authDomain: "baccobar-16b66.firebaseapp.com",
+        projectId: "baccobar-16b66",
+        storageBucket: "baccobar-16b66.firebasestorage.app",
+        messagingSenderId: "198958578807",
+        appId: "1:198958578807:web:944ea366a3fbb283b19a72",
+        measurementId: "G-YZ4VS24H0Z"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
